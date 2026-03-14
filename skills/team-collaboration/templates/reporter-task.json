@@ -1,0 +1,41 @@
+{
+  "template": "reporter-task",
+  "version": "1.0",
+  "description": "Reporter 角色任务模板（汇报协调）",
+  "example": {
+    "id": "task-0007-002",
+    "assignedTo": "身份 -0007",
+    "role": "reporter",
+    "task": "汇报阶段 1 - 基础搭建完成",
+    "description": "向老板汇报阶段 1 完成情况",
+    "status": "pending",
+    "dependencies": ["task-0004-001"],
+    "reportType": "stage_complete",
+    "reportChannel": "dingtalk",
+    "reportTemplate": "阶段汇报模板",
+    "reportedAt": null,
+    "createdAt": "2026-03-03T14:00:00",
+    "updatedAt": "2026-03-03T14:00:00"
+  },
+  "fields": {
+    "reportType": {
+      "type": "string",
+      "enum": ["stage_complete", "milestone_complete", "help_request", "final_report"],
+      "required": true
+    },
+    "reportChannel": {
+      "type": "string",
+      "enum": ["dingtalk", "email", "both"],
+      "required": true
+    },
+    "reportTemplate": {
+      "type": "string",
+      "description": "汇报模板名称"
+    }
+  },
+  "reportTemplates": {
+    "stage_complete": "✅ 阶段 X 完成汇报\n\n📝 项目：{project}\n🔧 身份：{identity}\n⏰ 完成时间：{time}\n\n📋 完成的任务：\n{tasks}\n\n📁 成果位置：\n{artifacts}\n\n🎉 阶段 X 完成！",
+    "help_request": "🆘 {identity}求助！\n\n📝 任务：{task}\n❌ 问题：{problem}\n📄 错误：{error}\n⏰ 时间：{time}\n\n需要老板指导！🙏",
+    "final_report": "📊 项目完成汇报\n\n📝 项目：{project}\n⏱️ 总耗时：{duration}\n✅ 完成度：{progress}\n\n【成果展示】\n{artifacts}\n\n【经验总结】\n{lessons}\n\n🎉 项目完成！"
+  }
+}

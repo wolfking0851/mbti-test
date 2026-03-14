@@ -1,0 +1,46 @@
+{
+  "template": "reviewer-task",
+  "version": "1.0",
+  "description": "Reviewer 角色任务模板（质量审查）",
+  "example": {
+    "id": "task-0004-001",
+    "assignedTo": "身份 -0004",
+    "role": "reviewer",
+    "task": "审查阶段 1 - 基础搭建",
+    "description": "审查 Builder 完成的基础搭建工作",
+    "status": "pending",
+    "dependencies": ["task-0005-001"],
+    "reviewCriteria": [
+      "目录结构完整",
+      "文件权限正确",
+      "语法检查通过"
+    ],
+    "reviewResult": null,
+    "reviewComments": null,
+    "reviewedAt": null,
+    "createdAt": "2026-03-03T14:00:00",
+    "updatedAt": "2026-03-03T14:00:00"
+  },
+  "fields": {
+    "reviewCriteria": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "审查标准列表"
+    },
+    "reviewResult": {
+      "type": "string",
+      "enum": ["approved", "rejected", "needs_revision"],
+      "description": "审查结果"
+    },
+    "reviewComments": {
+      "type": "string",
+      "description": "审查意见"
+    }
+  },
+  "workflow": {
+    "before": "等待 Builder 完成任务",
+    "during": "按审查标准逐项检查",
+    "after": "批准或打回重修"
+  }
+}

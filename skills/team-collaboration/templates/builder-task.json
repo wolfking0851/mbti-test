@@ -1,0 +1,64 @@
+{
+  "template": "builder-task",
+  "version": "1.0",
+  "description": "Builder 角色任务模板（开发工程师）",
+  "example": {
+    "id": "task-0005-001",
+    "assignedTo": "身份 -0005",
+    "role": "builder",
+    "task": "T001 - 创建目录结构",
+    "description": "创建项目所需的目录结构",
+    "status": "pending",
+    "claimedBy": null,
+    "claimedAt": null,
+    "completedAt": null,
+    "dependencies": [],
+    "retryCount": 0,
+    "maxRetries": 3,
+    "timeout": 300,
+    "createdAt": "2026-03-03T14:00:00",
+    "updatedAt": "2026-03-03T14:00:00"
+  },
+  "fields": {
+    "id": {
+      "type": "string",
+      "required": true,
+      "format": "task-{身份 ID}-{序号}",
+      "example": "task-0005-001"
+    },
+    "assignedTo": {
+      "type": "string",
+      "required": true,
+      "format": "身份 -XXXX",
+      "example": "身份 -0005"
+    },
+    "role": {
+      "type": "string",
+      "required": true,
+      "enum": ["builder", "reviewer", "reporter"],
+      "example": "builder"
+    },
+    "task": {
+      "type": "string",
+      "required": true,
+      "format": "T{序号} - 任务描述",
+      "example": "T001 - 创建目录结构"
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum": ["pending", "claimed", "completed", "blocked", "failed"]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "example": ["task-0004-001"]
+    }
+  },
+  "usage": {
+    "create": "cp templates/builder-task.json /workspace/team-tasks/task-0005-XXX.json",
+    "trigger": "python3 /workspace/scripts/heartbeat-checker.py",
+    "monitor": "cat /workspace/logs/wawa-0005.log"
+  }
+}
