@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理测试馆 - MBTI 图片选择测试</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .test-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .question-box { background: white; border-radius: 15px; padding: 30px; margin-top: 20px; display: none; }
+        .question-text { font-size: 1.3em; color: #333; margin-bottom: 25px; text-align: center; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+        .option { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .option:hover { border-color: #667eea; background: #f0f0ff; transform: translateY(-3px); }
+        .option img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background: #ddd; }
+        .option p { font-size: 0.9em; color: #666; }
+        .progress { background: rgba(255,255,255,0.3); border-radius: 10px; height: 8px; margin-bottom: 20px; }
+        .progress-bar { background: white; height: 100%; border-radius: 10px; transition: width 0.3s; }
+        .result-box { background: white; border-radius: 15px; padding: 40px; text-align: center; display: none; }
+        .result-emoji { font-size: 4em; margin-bottom: 20px; }
+        .result-title { color: #667eea; font-size: 2em; margin-bottom: 20px; }
+        .paywall { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px; margin-top: 30px; color: white; }
+        .btn { background: #667eea; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1em; cursor: pointer; transition: background 0.3s; }
+        .btn:hover { background: #5568d3; }
+        .footer { text-align: center; color: white; margin-top: 40px; opacity: 0.8; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 MBTI 性格测试</h1>
+            <p>通过图片选择，发现你的真实性格类型</p>
+        </div>
+
+        <!-- 首页 -->
+        <div id="homePage">
+            <div class="test-card">
+                <h2 style="color: #667eea; margin-bottom: 15px;">测试说明</h2>
+                <ul style="color: #666; line-height: 2; margin-bottom: 20px;">
+                    <li>✅ 共 6 轮图片选择</li>
+                    <li>✅ 每轮 3-4 个选项</li>
+                    <li>✅ 凭直觉选择，没有对错</li>
+                    <li>✅ 预计用时 3-5 分钟</li>
+                </ul>
+                <button class="btn" onclick="startTest()" style="width: 100%; padding: 15px; font-size: 1.1em;">开始测试</button>
+            </div>
+        </div>
+
+        <!-- 测试页面 -->
+        <div id="testPage" class="question-box">
+            <div class="progress"><div id="progressBar" class="progress-bar" style="width: 0%"></div></div>
+            <p style="text-align: right; color: #999; margin-bottom: 10px;"><span id="currentNum">1</span> / 6</p>
+            <h2 id="questionText" class="question-text">题目内容</h2>
+            <div id="options" class="options-grid"></div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="resultPage" class="result-box">
+            <div class="result-emoji" id="resultEmoji">🏗️</div>
+            <h1 class="result-title" id="resultTitle">INTJ - 建筑师型</h1>
+            <p style="color: #666; margin-bottom: 30px;" id="resultDesc">你的性格类型是</p>
+            
+            <div style="text-align: left; margin-bottom: 30px;" id="resultContent">
+                <h3 style="color: #667eea; margin-bottom: 15px;">🎯 核心特征</h3>
+                <ul style="color: #666; line-height: 2;">
+                    <li>✅ 战略思维，长远规划</li>
+                    <li>✅ 独立自信，有主见</li>
+                    <li>✅ 追求效率和能力</li>
+                    <li>✅ 学习能力强</li>
+                </ul>
+            </div>
+
+            <div class="paywall">
+                <h2 style="margin-bottom: 20px;">🔓 解锁深度解读报告</h2>
+                <ul style="text-align: left; margin: 20px 0; line-height: 2;">
+                    <li>✅ 详细性格分析（1000 字+）</li>
+                    <li>✅ 优势与盲点深度解析</li>
+                    <li>✅ 10 条专属发展建议</li>
+                    <li>✅ 适合职业匹配（10 个）</li>
+                    <li>✅ 亲密关系指南</li>
+                    <li>✅ 专属 PDF 报告下载</li>
+                </ul>
+                <button class="btn" style="background: white; color: #667eea; font-weight: bold; margin-top: 20px; width: 100%; padding: 15px;" onclick="alert('演示版暂不支持支付')">立即解锁 ¥9.9</button>
+                <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.8;">⚠️ 本结果由 AI 生成，仅供娱乐参考</p>
+            </div>
+
+            <button class="btn" style="margin-top: 20px; background: #667eea; width: 100%; padding: 15px;" onclick="location.reload()">重新测试</button>
+        </div>
+
+        <div class="footer">
+            <p>⚠️ 温馨提示：本测试基于心理学理论，由 AI 生成解读，仅供娱乐和自我探索参考</p>
+            <p style="margin-top: 10px;">不构成专业心理诊断，如有心理困扰请咨询专业心理咨询师</p>
+        </div>
+    </div>
+
+    <script>
+        // MBTI 测试题目（6 轮，每轮 3-4 选项）
+        const questions = [
+            {
+                text: '周末的早晨，你醒来后更想...？',
+                options: [
+                    { text: '阳光洒满房间，听到外面热闹的早市声音，迫不及待想出门逛逛', score: {E:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '窗外下着小雨，裹紧被子，享受独处的宁静时光', score: {I:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' },
+                    { text: '手机收到朋友消息，想着要不要出去聚餐', score: {E:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+C' },
+                    { text: '手机调成静音，想着今天可以不社交，感到轻松', score: {I:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+D' }
+                ]
+            },
+            {
+                text: '公司/学校组织团建活动，你希望...？',
+                options: [
+                    { text: '主动当队长，和陌生人聊天让你兴奋', score: {E:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '坐在角落安静观察，希望不要点名发言', score: {I:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' },
+                    { text: '和熟悉的人一起玩，看心情决定', score: {E:0.5, I:0.5}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+C' }
+                ]
+            },
+            {
+                text: '学习一项新技能时，你更喜欢...？',
+                options: [
+                    { text: '老师给出详细操作步骤，跟着一步步做', score: {S:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '老师先讲整体框架和原理，理解逻辑', score: {N:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' },
+                    { text: '看重实际案例，喜欢动手实践', score: {S:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+C' },
+                    { text: '思考未来应用，喜欢联想其他领域', score: {N:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+D' }
+                ]
+            },
+            {
+                text: '看一部电影后，你更倾向于...？',
+                options: [
+                    { text: '讨论剧情细节，记住具体的台词和画面', score: {S:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '思考电影主题，讨论导演的创作意图', score: {N:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' }
+                ]
+            },
+            {
+                text: '朋友犯了一个明显的错误，你会...？',
+                options: [
+                    { text: '直接指出问题，对事不对人', score: {T:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '先考虑朋友感受，委婉提醒或不说', score: {F:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' },
+                    { text: '分析错误原因，给出改进建议', score: {T:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+C' },
+                    { text: '安慰朋友情绪，等 Ta 主动问再说', score: {F:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+D' }
+                ]
+            },
+            {
+                text: '计划一次旅行，你通常会...？',
+                options: [
+                    { text: '提前一周做好详细攻略，精确到小时', score: {J:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+A' },
+                    { text: '只订机票和酒店，到了再说', score: {P:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+B' },
+                    { text: '列好行李清单，讨厌丢三落四', score: {J:1}, image: 'https://via.placeholder.com/300x200/667eea/ffffff?text=选项+C' },
+                    { text: '随便收拾，缺什么当地买', score: {P:1}, image: 'https://via.placeholder.com/300x200/764ba2/ffffff?text=选项+D' }
+                ]
+            }
+        ];
+
+        // MBTI 结果
+        const results = {
+            'INTJ': { emoji: '🏗️', title: 'INTJ - 建筑师型', desc: '你的性格类型是', features: ['战略思维，长远规划', '独立自信，有主见', '追求效率和能力', '学习能力强'] },
+            'INTP': { emoji: '🔬', title: 'INTP - 逻辑学家型', desc: '你的性格类型是', features: ['理性分析，追求真理', '好奇心强，喜欢探索', '创新思维，见解独特', '知识渊博，持续学习'] },
+            'ENTJ': { emoji: '👑', title: 'ENTJ - 指挥官型', desc: '你的性格类型是', features: ['天生领导力', '果断决策', '战略眼光', '追求成就'] },
+            'ENTP': { emoji: '💡', title: 'ENTP - 辩论家型', desc: '你的性格类型是', features: ['思维敏捷，善于辩论', '创新能力强', '喜欢挑战传统', '多才多艺'] },
+            'INFJ': { emoji: '🌟', title: 'INFJ - 提倡者型', desc: '你的性格类型是', features: ['理想主义，富有洞察力', '关心他人，有同理心', '追求意义和深度', '有创造力'] },
+            'INFP': { emoji: '🦋', title: 'INFP - 调停者型', desc: '你的性格类型是', features: ['理想主义，追求真实', '富有想象力', '价值观坚定', '善于理解他人'] },
+            'ENFJ': { emoji: '🌞', title: 'ENFJ - 主人公型', desc: '你的性格类型是', features: ['魅力型领导', '关心他人成长', '善于激励', '有责任感'] },
+            'ENFP': { emoji: '🎉', title: 'ENFP - 竞选者型', desc: '你的性格类型是', features: ['热情洋溢', '创造力强', '善于社交', '追求自由'] },
+            'ISTJ': { emoji: '📋', title: 'ISTJ - 物流师型', desc: '你的性格类型是', features: ['责任心强', '注重细节', '遵循规则', '可靠稳定'] },
+            'ISFJ': { emoji: '🏠', title: 'ISFJ - 守卫者型', desc: '你的性格类型是', features: ['关心他人', '责任心强', '注重传统', '乐于助人'] },
+            'ESTJ': { emoji: '💼', title: 'ESTJ - 总经理型', desc: '你的性格类型是', features: ['高效执行', '注重秩序', '果断决策', '善于管理'] },
+            'ESFJ': { emoji: '🤝', title: 'ESFJ - 执政官型', desc: '你的性格类型是', features: ['关心他人', '善于社交', '注重和谐', '责任感强'] },
+            'ISTP': { emoji: '🔧', title: 'ISTP - 鉴赏家型', desc: '你的性格类型是', features: ['动手能力强', '理性分析', '灵活应变', '喜欢冒险'] },
+            'ISFP': { emoji: '🎨', title: 'ISFP - 探险家型', desc: '你的性格类型是', features: ['艺术气质', '温和敏感', '追求自由', '注重当下'] },
+            'ESTP': { emoji: '⚡', title: 'ESTP - 企业家型', desc: '你的性格类型是', features: ['行动力强', '善于交际', '喜欢挑战', '适应力强'] },
+            'ESFP': { emoji: '🎭', title: 'ESFP - 表演者型', desc: '你的性格类型是', features: ['热情开朗', '善于表演', '享受当下', '人缘好'] }
+        };
+
+        let currentQuestion = 0;
+        let scores = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+
+        function startTest() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('testPage').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('currentNum').textContent = currentQuestion + 1;
+            document.getElementById('progressBar').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.innerHTML = `<img src="${opt.image}" alt="选项${idx+1}"><p>${opt.text}</p>`;
+                div.onclick = () => handleAnswer(opt.score);
+                optionsDiv.appendChild(div);
+            });
+        }
+
+        function handleAnswer(score) {
+            for (const [key, value] of Object.entries(score)) {
+                scores[key] = (scores[key] || 0) + value;
+            }
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('testPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            
+            // 计算 MBTI 类型
+            const type = (scores.E >= scores.I ? 'E' : 'I') +
+                        (scores.S >= scores.N ? 'S' : 'N') +
+                        (scores.T >= scores.F ? 'T' : 'F') +
+                        (scores.J >= scores.P ? 'J' : 'P');
+            
+            const result = results[type] || results.INTJ;
+            document.getElementById('resultEmoji').textContent = result.emoji;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDesc').textContent = result.desc;
+            
+            const featuresHtml = result.features.map(f => `<li>✅ ${f}</li>`).join('');
+            document.getElementById('resultContent').innerHTML = `
+                <h3 style="color: #667eea; margin-bottom: 15px;">🎯 核心特征</h3>
+                <ul style="color: #666; line-height: 2;">
+                    ${featuresHtml}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
