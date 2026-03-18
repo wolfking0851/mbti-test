@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 趣味测试馆 - MBTI 96 题完整版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 2em; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        .progress { background: #f0f0f0; border-radius: 10px; height: 8px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; transition: width 0.3s; }
+        .question { font-size: 1.3em; color: #333; margin-bottom: 30px; text-align: center; }
+        .options { display: grid; gap: 20px; }
+        .option { background: #f8f9fa; border: 3px solid #e9ecef; border-radius: 15px; padding: 25px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 20px; }
+        .option:hover { border-color: #667eea; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.2); }
+        .option img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+        .option-text { flex: 1; font-size: 1.1em; color: #333; }
+        .result { text-align: center; display: none; }
+        .result-type { font-size: 4em; font-weight: bold; color: #667eea; margin-bottom: 20px; }
+        .result-title { font-size: 1.5em; color: #333; margin-bottom: 20px; }
+        .result-desc { color: #666; line-height: 1.8; margin-bottom: 30px; }
+        .btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1em; cursor: pointer; margin: 10px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.3); }
+        .hidden { display: none; }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            h1 { font-size: 1.5em; }
+            .option { flex-direction: column; text-align: center; }
+            .option img { width: 100%; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🧠 MBTI 96 题完整版</h1>
+            <p class="subtitle">AI 趣味测试馆 - 深度探索你的性格类型</p>
+            
+            <div id="quiz">
+                <div class="progress">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="question" id="question"></div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="result" id="result">
+                <div class="result-type" id="result-type"></div>
+                <div class="result-title" id="result-title"></div>
+                <div class="result-desc" id="result-desc"></div>
+                <button class="btn" onclick="location.reload()">再测一次</button>
+                <button class="btn" onclick="window.open('https://5f373f52.mbti-test-3zy.pages.dev', '_blank')">返回首页</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+  { text: '社交聚会中，你通常？', options: [
+    { text: '主动与很多人交流，包括陌生人', score: {E:1}, image: 'images-96t-v6/q1_optionA.jpg' },
+    { text: '只与几个熟悉的人交流', score: {I:1}, image: 'images-96t-v6/q1_optionB.jpg' }]},
+  { text: '经过一周的工作，你更喜欢？', options: [
+    { text: '和朋友出去放松', score: {E:1}, image: 'images-96t-v6/q2_optionA.jpg' },
+    { text: '在家安静休息', score: {I:1}, image: 'images-96t-v6/q2_optionB.jpg' }]},
+  { text: '认识新朋友时，你？', options: [
+    { text: '主动介绍自己', score: {E:1}, image: 'images-96t-v6/q3_optionA.jpg' },
+    { text: '等别人来介绍', score: {I:1}, image: 'images-96t-v6/q3_optionB.jpg' }]},
+  { text: '在团队讨论中，你？', options: [
+    { text: '积极发言，边说边想', score: {E:1}, image: 'images-96t-v6/q4_optionA.jpg' },
+    { text: '先听别人说，想好再发言', score: {I:1}, image: 'images-96t-v6/q4_optionB.jpg' }]},
+  { text: '你更喜欢的工作方式？', options: [
+    { text: '团队协作，集思广益', score: {E:1}, image: 'images-96t-v6/q5_optionA.jpg' },
+    { text: '独立工作，深度思考', score: {I:1}, image: 'images-96t-v6/q5_optionB.jpg' }]},
+  { text: '参加大型活动后，你感觉？', options: [
+    { text: '更有活力了', score: {E:1}, image: 'images-96t-v6/q6_optionA.jpg' },
+    { text: '有点累，需要独处恢复', score: {I:1}, image: 'images-96t-v6/q6_optionB.jpg' }]},
+  { text: '空闲时间，你倾向于？', options: [
+    { text: '约朋友出去玩', score: {E:1}, image: 'images-96t-v6/q7_optionA.jpg' },
+    { text: '一个人看书或追剧', score: {I:1}, image: 'images-96t-v6/q7_optionB.jpg' }]},
+  { text: '在人群中，你通常？', options: [
+    { text: '成为焦点，活跃气氛', score: {E:1}, image: 'images-96t-v6/q8_optionA.jpg' },
+    { text: '安静观察，偶尔发言', score: {I:1}, image: 'images-96t-v6/q8_optionB.jpg' }]},
+  { text: '打电话时，你？', options: [
+    { text: '喜欢长时间聊天', score: {E:1}, image: 'images-96t-v6/q9_optionA.jpg' },
+    { text: '说完正事就挂', score: {I:1}, image: 'images-96t-v6/q9_optionB.jpg' }]},
+  { text: '学习新东西时，你更喜欢？', options: [
+    { text: '小组讨论，互相交流', score: {E:1}, image: 'images-96t-v6/q10_optionA.jpg' },
+    { text: '自己研究，独立思考', score: {I:1}, image: 'images-96t-v6/q10_optionB.jpg' }]},
+  { text: '遇到压力时，你倾向于？', options: [
+    { text: '找朋友倾诉', score: {E:1}, image: 'images-96t-v6/q11_optionA.jpg' },
+    { text: '自己消化处理', score: {I:1}, image: 'images-96t-v6/q11_optionB.jpg' }]},
+  { text: '你的社交圈？', options: [
+    { text: '很大，认识很多人', score: {E:1}, image: 'images-96t-v6/q12_optionA.jpg' },
+    { text: '小而精，几个知己', score: {I:1}, image: 'images-96t-v6/q12_optionB.jpg' }]},
+  { text: '周末计划，你通常？', options: [
+    { text: '安排满各种社交活动', score: {E:1}, image: 'images-96t-v6/q13_optionA.jpg' },
+    { text: '留时间独处充电', score: {I:1}, image: 'images-96t-v6/q13_optionB.jpg' }]},
+  { text: '聚餐时，你？', options: [
+    { text: '主动活跃气氛', score: {E:1}, image: 'images-96t-v6/q14_optionA.jpg' },
+    { text: '和旁边的人聊天', score: {I:1}, image: 'images-96t-v6/q14_optionB.jpg' }]},
+  { text: '表达想法时，你？', options: [
+    { text: '边说边思考', score: {E:1}, image: 'images-96t-v6/q15_optionA.jpg' },
+    { text: '想好再说', score: {I:1}, image: 'images-96t-v6/q15_optionB.jpg' }]},
+  { text: '能量来源，你更多来自？', options: [
+    { text: '与他人互动', score: {E:1}, image: 'images-96t-v6/q16_optionA.jpg' },
+    { text: '独处时光', score: {I:1}, image: 'images-96t-v6/q16_optionB.jpg' }]},
+  { text: '会议中，你？', options: [
+    { text: '积极发言，参与讨论', score: {E:1}, image: 'images-96t-v6/q17_optionA.jpg' },
+    { text: '倾听为主，必要时发言', score: {I:1}, image: 'images-96t-v6/q17_optionB.jpg' }]},
+  { text: '交朋友，你？', options: [
+    { text: '容易结交新朋友', score: {E:1}, image: 'images-96t-v6/q18_optionA.jpg' },
+    { text: '慎重选择深交', score: {I:1}, image: 'images-96t-v6/q18_optionB.jpg' }]},
+  { text: '工作休息时，你？', options: [
+    { text: '和同事聊天放松', score: {E:1}, image: 'images-96t-v6/q19_optionA.jpg' },
+    { text: '独自休息恢复', score: {I:1}, image: 'images-96t-v6/q19_optionB.jpg' }]},
+  { text: '被关注时，你？', options: [
+    { text: '享受成为焦点', score: {E:1}, image: 'images-96t-v6/q20_optionA.jpg' },
+    { text: '感到不自在', score: {I:1}, image: 'images-96t-v6/q20_optionB.jpg' }]},
+  { text: '思考问题时，你？', options: [
+    { text: '喜欢和人讨论', score: {E:1}, image: 'images-96t-v6/q21_optionA.jpg' },
+    { text: '喜欢独自思考', score: {I:1}, image: 'images-96t-v6/q21_optionB.jpg' }]},
+  { text: '参加活动前，你？', options: [
+    { text: '兴奋期待', score: {E:1}, image: 'images-96t-v6/q22_optionA.jpg' },
+    { text: '有些抗拒', score: {I:1}, image: 'images-96t-v6/q22_optionB.jpg' }]},
+  { text: '自我介绍时，你？', options: [
+    { text: '详细热情', score: {E:1}, image: 'images-96t-v6/q23_optionA.jpg' },
+    { text: '简洁内敛', score: {I:1}, image: 'images-96t-v6/q23_optionB.jpg' }]},
+  { text: '一天结束后，你？', options: [
+    { text: '想找人分享', score: {E:1}, image: 'images-96t-v6/q24_optionA.jpg' },
+    { text: '想安静独处', score: {I:1}, image: 'images-96t-v6/q24_optionB.jpg' }]},
+  { text: '你更相信？', options: [
+    { text: '眼见为实', score: {S:1}, image: 'images-96t-v6/q25_optionA.jpg' },
+    { text: '直觉灵感', score: {N:1}, image: 'images-96t-v6/q25_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '细节', score: {S:1}, image: 'images-96t-v6/q26_optionA.jpg' },
+    { text: '整体', score: {N:1}, image: 'images-96t-v6/q26_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '记忆事实', score: {S:1}, image: 'images-96t-v6/q27_optionA.jpg' },
+    { text: '理解概念', score: {N:1}, image: 'images-96t-v6/q27_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '按部就班', score: {S:1}, image: 'images-96t-v6/q28_optionA.jpg' },
+    { text: '创新突破', score: {N:1}, image: 'images-96t-v6/q28_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '经验', score: {S:1}, image: 'images-96t-v6/q29_optionA.jpg' },
+    { text: '创意', score: {N:1}, image: 'images-96t-v6/q29_optionB.jpg' }]},
+  { text: '学习时，你更喜欢？', options: [
+    { text: '具体案例', score: {S:1}, image: 'images-96t-v6/q30_optionA.jpg' },
+    { text: '抽象理论', score: {N:1}, image: 'images-96t-v6/q30_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '现在', score: {S:1}, image: 'images-96t-v6/q31_optionA.jpg' },
+    { text: '未来', score: {N:1}, image: 'images-96t-v6/q31_optionB.jpg' }]},
+  { text: '你更相信？', options: [
+    { text: '实际经验', score: {S:1}, image: 'images-96t-v6/q32_optionA.jpg' },
+    { text: '第六感', score: {N:1}, image: 'images-96t-v6/q32_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '执行', score: {S:1}, image: 'images-96t-v6/q33_optionA.jpg' },
+    { text: '规划', score: {N:1}, image: 'images-96t-v6/q33_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '实用的东西', score: {S:1}, image: 'images-96t-v6/q34_optionA.jpg' },
+    { text: '有想象力的东西', score: {N:1}, image: 'images-96t-v6/q34_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '是什么', score: {S:1}, image: 'images-96t-v6/q35_optionA.jpg' },
+    { text: '为什么', score: {N:1}, image: 'images-96t-v6/q35_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '处理具体事务', score: {S:1}, image: 'images-96t-v6/q36_optionA.jpg' },
+    { text: '思考抽象概念', score: {N:1}, image: 'images-96t-v6/q36_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '传统', score: {S:1}, image: 'images-96t-v6/q37_optionA.jpg' },
+    { text: '变革', score: {N:1}, image: 'images-96t-v6/q37_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '明确的指示', score: {S:1}, image: 'images-96t-v6/q38_optionA.jpg' },
+    { text: '自由发挥', score: {N:1}, image: 'images-96t-v6/q38_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '现实', score: {S:1}, image: 'images-96t-v6/q39_optionA.jpg' },
+    { text: '可能性', score: {N:1}, image: 'images-96t-v6/q39_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '观察细节', score: {S:1}, image: 'images-96t-v6/q40_optionA.jpg' },
+    { text: '洞察本质', score: {N:1}, image: 'images-96t-v6/q40_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '循序渐进', score: {S:1}, image: 'images-96t-v6/q41_optionA.jpg' },
+    { text: '跳跃思维', score: {N:1}, image: 'images-96t-v6/q41_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '实用性', score: {S:1}, image: 'images-96t-v6/q42_optionA.jpg' },
+    { text: '创新性', score: {N:1}, image: 'images-96t-v6/q42_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '具体事实', score: {S:1}, image: 'images-96t-v6/q43_optionA.jpg' },
+    { text: '潜在含义', score: {N:1}, image: 'images-96t-v6/q43_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '记住细节', score: {S:1}, image: 'images-96t-v6/q44_optionA.jpg' },
+    { text: '联想发散', score: {N:1}, image: 'images-96t-v6/q44_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '已验证的方法', score: {S:1}, image: 'images-96t-v6/q45_optionA.jpg' },
+    { text: '新的尝试', score: {N:1}, image: 'images-96t-v6/q45_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '当下', score: {S:1}, image: 'images-96t-v6/q46_optionA.jpg' },
+    { text: '长远', score: {N:1}, image: 'images-96t-v6/q46_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '描述事实', score: {S:1}, image: 'images-96t-v6/q47_optionA.jpg' },
+    { text: '解读含义', score: {N:1}, image: 'images-96t-v6/q47_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '具体的', score: {S:1}, image: 'images-96t-v6/q48_optionA.jpg' },
+    { text: '抽象的', score: {N:1}, image: 'images-96t-v6/q48_optionB.jpg' }]},
+  { text: '做决策时，你更依赖？', options: [
+    { text: '逻辑分析', score: {T:1}, image: 'images-96t-v6/q49_optionA.jpg' },
+    { text: '内心感受', score: {F:1}, image: 'images-96t-v6/q49_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '公平', score: {T:1}, image: 'images-96t-v6/q50_optionA.jpg' },
+    { text: '和谐', score: {F:1}, image: 'images-96t-v6/q50_optionB.jpg' }]},
+  { text: '面对冲突，你？', options: [
+    { text: '据理力争', score: {T:1}, image: 'images-96t-v6/q51_optionA.jpg' },
+    { text: '妥协退让', score: {F:1}, image: 'images-96t-v6/q51_optionB.jpg' }]},
+  { text: '你更相信？', options: [
+    { text: '客观标准', score: {T:1}, image: 'images-96t-v6/q52_optionA.jpg' },
+    { text: '主观感受', score: {F:1}, image: 'images-96t-v6/q52_optionB.jpg' }]},
+  { text: '表达关心时，你更可能？', options: [
+    { text: '提供实际帮助', score: {T:1}, image: 'images-96t-v6/q53_optionA.jpg' },
+    { text: '说温暖的话', score: {F:1}, image: 'images-96t-v6/q53_optionB.jpg' }]},
+  { text: '做选择时，你更依赖？', options: [
+    { text: '理性分析', score: {T:1}, image: 'images-96t-v6/q54_optionA.jpg' },
+    { text: '价值观导向', score: {F:1}, image: 'images-96t-v6/q54_optionB.jpg' }]},
+  { text: '你认为自己？', options: [
+    { text: '头脑冷静', score: {T:1}, image: 'images-96t-v6/q55_optionA.jpg' },
+    { text: '心地善良', score: {F:1}, image: 'images-96t-v6/q55_optionB.jpg' }]},
+  { text: '被批评时，你？', options: [
+    { text: '分析对错', score: {T:1}, image: 'images-96t-v6/q56_optionA.jpg' },
+    { text: '感受情绪', score: {F:1}, image: 'images-96t-v6/q56_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '公平正义', score: {T:1}, image: 'images-96t-v6/q57_optionA.jpg' },
+    { text: '人情世故', score: {F:1}, image: 'images-96t-v6/q57_optionB.jpg' }]},
+  { text: '做决策，你？', options: [
+    { text: '逻辑推理', score: {T:1}, image: 'images-96t-v6/q58_optionA.jpg' },
+    { text: '内心感受', score: {F:1}, image: 'images-96t-v6/q58_optionB.jpg' }]},
+  { text: '你更倾向于？', options: [
+    { text: '对事不对人', score: {T:1}, image: 'images-96t-v6/q59_optionA.jpg' },
+    { text: '考虑人情', score: {F:1}, image: 'images-96t-v6/q59_optionB.jpg' }]},
+  { text: '面对问题，你？', options: [
+    { text: '分析原因', score: {T:1}, image: 'images-96t-v6/q60_optionA.jpg' },
+    { text: '考虑感受', score: {F:1}, image: 'images-96t-v6/q60_optionB.jpg' }]},
+  { text: '你更关注？', options: [
+    { text: '事情本身', score: {T:1}, image: 'images-96t-v6/q61_optionA.jpg' },
+    { text: '人的感受', score: {F:1}, image: 'images-96t-v6/q61_optionB.jpg' }]},
+  { text: '评价事情，你？', options: [
+    { text: '客观标准', score: {T:1}, image: 'images-96t-v6/q62_optionA.jpg' },
+    { text: '主观感受', score: {F:1}, image: 'images-96t-v6/q62_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '理性分析', score: {T:1}, image: 'images-96t-v6/q63_optionA.jpg' },
+    { text: '情感共鸣', score: {F:1}, image: 'images-96t-v6/q63_optionB.jpg' }]},
+  { text: '处理矛盾，你？', options: [
+    { text: '讲道理', score: {T:1}, image: 'images-96t-v6/q64_optionA.jpg' },
+    { text: '讲感情', score: {F:1}, image: 'images-96t-v6/q64_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '真相', score: {T:1}, image: 'images-96t-v6/q65_optionA.jpg' },
+    { text: '和谐', score: {F:1}, image: 'images-96t-v6/q65_optionB.jpg' }]},
+  { text: '做判断时，你？', options: [
+    { text: '用逻辑', score: {T:1}, image: 'images-96t-v6/q66_optionA.jpg' },
+    { text: '用直觉', score: {F:1}, image: 'images-96t-v6/q66_optionB.jpg' }]},
+  { text: '你更倾向于？', options: [
+    { text: '批判性思维', score: {T:1}, image: 'images-96t-v6/q67_optionA.jpg' },
+    { text: '同理心', score: {F:1}, image: 'images-96t-v6/q67_optionB.jpg' }]},
+  { text: '面对批评，你？', options: [
+    { text: '分析是否有道理', score: {T:1}, image: 'images-96t-v6/q68_optionA.jpg' },
+    { text: '感到受伤', score: {F:1}, image: 'images-96t-v6/q68_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '能力', score: {T:1}, image: 'images-96t-v6/q69_optionA.jpg' },
+    { text: '品德', score: {F:1}, image: 'images-96t-v6/q69_optionB.jpg' }]},
+  { text: '帮助别人时，你？', options: [
+    { text: '提供解决方案', score: {T:1}, image: 'images-96t-v6/q70_optionA.jpg' },
+    { text: '给予情感支持', score: {F:1}, image: 'images-96t-v6/q70_optionB.jpg' }]},
+  { text: '你更相信？', options: [
+    { text: '理性', score: {T:1}, image: 'images-96t-v6/q71_optionA.jpg' },
+    { text: '感性', score: {F:1}, image: 'images-96t-v6/q71_optionB.jpg' }]},
+  { text: '做决定前，你？', options: [
+    { text: '分析利弊', score: {T:1}, image: 'images-96t-v6/q72_optionA.jpg' },
+    { text: '考虑感受', score: {F:1}, image: 'images-96t-v6/q72_optionB.jpg' }]},
+  { text: '计划旅行时，你通常？', options: [
+    { text: '提前做好详细攻略', score: {J:1}, image: 'images-96t-v6/q73_optionA.jpg' },
+    { text: '到了再说，随性而为', score: {P:1}, image: 'images-96t-v6/q73_optionB.jpg' }]},
+  { text: '你的工作风格？', options: [
+    { text: '先制定计划，然后执行', score: {J:1}, image: 'images-96t-v6/q74_optionA.jpg' },
+    { text: '边做边调整，保持灵活', score: {P:1}, image: 'images-96t-v6/q74_optionB.jpg' }]},
+  { text: '面对截止日期，你？', options: [
+    { text: '提前完成', score: {J:1}, image: 'images-96t-v6/q75_optionA.jpg' },
+    { text: '最后一刻完成', score: {P:1}, image: 'images-96t-v6/q75_optionB.jpg' }]},
+  { text: '你的生活环境？', options: [
+    { text: '整洁有序，物品有固定位置', score: {J:1}, image: 'images-96t-v6/q76_optionA.jpg' },
+    { text: '随意舒适，不拘小节', score: {P:1}, image: 'images-96t-v6/q76_optionB.jpg' }]},
+  { text: '做决定时，你？', options: [
+    { text: '快速决定，喜欢闭环', score: {J:1}, image: 'images-96t-v6/q77_optionA.jpg' },
+    { text: '保持开放，收集更多信息', score: {P:1}, image: 'images-96t-v6/q77_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '有计划有结构的生活', score: {J:1}, image: 'images-96t-v6/q78_optionA.jpg' },
+    { text: '自由随性的生活', score: {P:1}, image: 'images-96t-v6/q78_optionB.jpg' }]},
+  { text: '接到任务时，你倾向于？', options: [
+    { text: '立即开始，按时完成', score: {J:1}, image: 'images-96t-v6/q79_optionA.jpg' },
+    { text: '先放着，等有灵感再做', score: {P:1}, image: 'images-96t-v6/q79_optionB.jpg' }]},
+  { text: '你的时间观念？', options: [
+    { text: '很强，准时守约', score: {J:1}, image: 'images-96t-v6/q80_optionA.jpg' },
+    { text: '灵活，偶尔迟到', score: {P:1}, image: 'images-96t-v6/q80_optionB.jpg' }]},
+  { text: '你更喜欢的工作方式？', options: [
+    { text: '明确的工作流程和标准', score: {J:1}, image: 'images-96t-v6/q81_optionA.jpg' },
+    { text: '自由发挥，创新突破', score: {P:1}, image: 'images-96t-v6/q81_optionB.jpg' }]},
+  { text: '完成任务后，你？', options: [
+    { text: '立即检查，确保无误', score: {J:1}, image: 'images-96t-v6/q82_optionA.jpg' },
+    { text: '觉得差不多就行', score: {P:1}, image: 'images-96t-v6/q82_optionB.jpg' }]},
+  { text: '购物时，你？', options: [
+    { text: '列好清单，按计划购买', score: {J:1}, image: 'images-96t-v6/q83_optionA.jpg' },
+    { text: '随便逛逛，看到喜欢的就买', score: {P:1}, image: 'images-96t-v6/q83_optionB.jpg' }]},
+  { text: '对待规则，你？', options: [
+    { text: '认为规则很重要，需要遵守', score: {J:1}, image: 'images-96t-v6/q84_optionA.jpg' },
+    { text: '认为规则可以灵活变通', score: {P:1}, image: 'images-96t-v6/q84_optionB.jpg' }]},
+  { text: '安排日程，你？', options: [
+    { text: '详细规划', score: {J:1}, image: 'images-96t-v6/q85_optionA.jpg' },
+    { text: '随性安排', score: {P:1}, image: 'images-96t-v6/q85_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '确定性', score: {J:1}, image: 'images-96t-v6/q86_optionA.jpg' },
+    { text: '可能性', score: {P:1}, image: 'images-96t-v6/q86_optionB.jpg' }]},
+  { text: '做项目时，你？', options: [
+    { text: '按步骤执行', score: {J:1}, image: 'images-96t-v6/q87_optionA.jpg' },
+    { text: '边做边改', score: {P:1}, image: 'images-96t-v6/q87_optionB.jpg' }]},
+  { text: '你更擅长？', options: [
+    { text: '执行计划', score: {J:1}, image: 'images-96t-v6/q88_optionA.jpg' },
+    { text: '应对变化', score: {P:1}, image: 'images-96t-v6/q88_optionB.jpg' }]},
+  { text: '面对选择，你？', options: [
+    { text: '尽快决定', score: {J:1}, image: 'images-96t-v6/q89_optionA.jpg' },
+    { text: '多看看再说', score: {P:1}, image: 'images-96t-v6/q89_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '结构化', score: {J:1}, image: 'images-96t-v6/q90_optionA.jpg' },
+    { text: '灵活性', score: {P:1}, image: 'images-96t-v6/q90_optionB.jpg' }]},
+  { text: '整理东西，你？', options: [
+    { text: '分类整齐', score: {J:1}, image: 'images-96t-v6/q91_optionA.jpg' },
+    { text: '随意放置', score: {P:1}, image: 'images-96t-v6/q91_optionB.jpg' }]},
+  { text: '你更看重？', options: [
+    { text: '完成', score: {J:1}, image: 'images-96t-v6/q92_optionA.jpg' },
+    { text: '过程', score: {P:1}, image: 'images-96t-v6/q92_optionB.jpg' }]},
+  { text: '做决定前，你？', options: [
+    { text: '收集足够信息', score: {J:1}, image: 'images-96t-v6/q93_optionA.jpg' },
+    { text: '凭感觉', score: {P:1}, image: 'images-96t-v6/q93_optionB.jpg' }]},
+  { text: '你更倾向于？', options: [
+    { text: '提前准备', score: {J:1}, image: 'images-96t-v6/q94_optionA.jpg' },
+    { text: '临时发挥', score: {P:1}, image: 'images-96t-v6/q94_optionB.jpg' }]},
+  { text: '面对变化，你？', options: [
+    { text: '不喜欢', score: {J:1}, image: 'images-96t-v6/q95_optionA.jpg' },
+    { text: '适应', score: {P:1}, image: 'images-96t-v6/q95_optionB.jpg' }]},
+  { text: '你更喜欢？', options: [
+    { text: '按部就班', score: {J:1}, image: 'images-96t-v6/q96_optionA.jpg' },
+    { text: '随机应变', score: {P:1}, image: 'images-96t-v6/q96_optionB.jpg' }]}
+];
+
+        const resultTypes = {
+  'ISTJ': { title: '物流师', desc: '实际、注重事实、责任心强，善于组织和执行。你可靠、务实，喜欢按计划行事。' },
+  'ISFJ': { title: '守卫者', desc: '温暖、体贴、有责任感，默默付出照顾他人。你细心、忠诚，重视和谐。' },
+  'INFJ': { title: '提倡者', desc: '理想主义、富有洞察力，致力于帮助他人成长。你深刻、有远见，追求意义。' },
+  'INTJ': { title: '建筑师', desc: '战略思维、独立、有远见，善于制定长期计划。你理性、自信，追求完美。' },
+  'ISTP': { title: '鉴赏家', desc: '冷静、理性、动手能力强，善于解决实际问题。你灵活、务实，喜欢探索。' },
+  'ISFP': { title: '探险家', desc: '温和、敏感、有艺术气质，活在当下享受美好。你善良、审美强，追求和谐。' },
+  'INFP': { title: '调停者', desc: '理想主义、富有同情心，追求真实和意义。你善良、有创造力，重视价值观。' },
+  'INTP': { title: '逻辑学家', desc: '好奇、理性、善于分析，追求真理和知识。你独立、创新，喜欢思考。' },
+  'ESTP': { title: '企业家', desc: '活力充沛、善于交际、行动力强，享受冒险和挑战。你务实、灵活，活在当下。' },
+  'ESFP': { title: '表演者', desc: '热情、外向、爱表现，喜欢成为焦点。你友好、乐观，享受生活。' },
+  'ENFP': { title: '竞选者', desc: '热情、有创造力、善于交际，充满可能性。你乐观、有想象力，追求自由。' },
+  'ENTP': { title: '辩论家', desc: '聪明、好奇、善于辩论，喜欢智力挑战。你创新、机智，享受思辨。' },
+  'ESTJ': { title: '总经理', desc: '高效、有组织、责任心强，善于管理和执行。你务实、直接，重视规则。' },
+  'ESFJ': { title: '执政官', desc: '温暖、外向、乐于助人，重视和谐与传统。你体贴、负责，关心他人。' },
+  'ENFJ': { title: '主人公', desc: '魅力十足、有领导力、善于激励他人。你理想主义、有同情心，帮助他人成长。' },
+  'ENTJ': { title: '指挥官', desc: '果断、有战略眼光、天生的领导者。你理性、自信，善于组织和管理。' }
+};
+
+        let currentQuestion = 0;
+        let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('question').innerHTML = `<strong>第 ${currentQuestion + 1}/${questions.length} 题</strong><br><br>${q.text}`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            const optionsHtml = q.options.map((opt, i) => `
+                <div class="option" onclick="selectOption(${i})">
+                    <img src="${opt.image}" alt="选项${i+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><rect fill=%22%23f0f0f0%22 width=%22120%22 height=%22120%22/><text fill=%22%23999%22 x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22>图片</text></svg>'">
+                    <div class="option-text">${opt.text}</div>
+                </div>
+            `).join('');
+            document.getElementById('options').innerHTML = optionsHtml;
+        }
+
+        function selectOption(optionIndex) {
+            const q = questions[currentQuestion];
+            const opt = q.options[optionIndex];
+            
+            // 计分
+            for (let dim in opt.score) {
+                scores[dim] += opt.score[dim];
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz').classList.add('hidden');
+            document.getElementById('result').style.display = 'block';
+            
+            const type = calculateType();
+            const result = resultTypes[type];
+            
+            document.getElementById('result-type').textContent = type;
+            document.getElementById('result-title').textContent = `「${result.title}」`;
+            document.getElementById('result-desc').textContent = result.desc;
+        }
+
+        function calculateType() {
+            let type = '';
+            type += scores.E >= scores.I ? 'E' : 'I';
+            type += scores.S >= scores.N ? 'S' : 'N';
+            type += scores.T >= scores.F ? 'T' : 'F';
+            type += scores.J >= scores.P ? 'J' : 'P';
+            return type;
+        }
+
+        // 初始化
+        renderQuestion();
+    </script>
+</body>
+</html>
