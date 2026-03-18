@@ -25,6 +25,12 @@
         .result-desc { color: #666; line-height: 1.8; margin-bottom: 30px; }
         .btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1em; cursor: pointer; margin: 10px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.3); }
+        .btn-max { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .btn-max:hover { box-shadow: 0 5px 15px rgba(240,147,251,0.4); }
+        .premium-section { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 15px; margin: 25px 0; }
+        .premium-title { font-size: 1.3em; font-weight: bold; color: #667eea; margin-bottom: 15px; }
+        .premium-features { text-align: left; margin: 15px 0; }
+        .premium-features li { margin: 8px 0; color: #555; }
         .hidden { display: none; }
         @media (max-width: 600px) {
             .card { padding: 20px; }
@@ -52,8 +58,26 @@
                 <div class="result-type" id="result-type"></div>
                 <div class="result-title" id="result-title"></div>
                 <div class="result-desc" id="result-desc"></div>
-                <button class="btn" onclick="location.reload()">再测一次</button>
-                <button class="btn" onclick="window.open('https://5f373f52.mbti-test-3zy.pages.dev', '_blank')">返回首页</button>
+                
+                <!-- 付费解锁入口 -->
+                <div class="premium-section">
+                    <div class="premium-title">🔓 解锁 Max 版深度报告</div>
+                    <ul class="premium-features">
+                        <li>✅ 15-20 页深度解读（8000-10000 字）</li>
+                        <li>✅ 详细维度得分分析</li>
+                        <li>✅ 职业发展建议</li>
+                        <li>✅ 个人成长指南</li>
+                        <li>✅ 人际关系建议</li>
+                        <li>✅ 可下载 PDF 报告</li>
+                    </ul>
+                    <button class="btn btn-max" onclick="unlockMax()" style="width: 100%; margin: 15px 0; padding: 18px; font-size: 1.2em; font-weight: bold;">
+                        💎 解锁 Max 版报告 - ¥6.9
+                    </button>
+                    <p style="font-size: 0.85em; color: #999; margin-top: 10px;">⏳ 微店支付，安全便捷</p>
+                </div>
+                
+                <button class="btn" onclick="location.reload()" style="background: linear-gradient(135deg, #3498db, #2980b9);">重新测试</button>
+                <button class="btn" onclick="window.open('https://5f373f52.mbti-test-3zy.pages.dev', '_blank')" style="background: linear-gradient(135deg, #95a5a6, #7f8c8d);">返回首页</button>
             </div>
         </div>
     </div>
@@ -349,6 +373,17 @@
     { text: '按部就班', score: {J:1}, image: 'images-96t-v6/q96_optionA.jpg' },
     { text: '随机应变', score: {P:1}, image: 'images-96t-v6/q96_optionB.jpg' }]}
 ];
+
+        // 付费解锁函数
+        function unlockMax() {
+            // TODO: 替换为微店商品链接
+            const weidianUrl = 'https://weidian.com/'; // 待老板提供
+            if (weidianUrl === 'https://weidian.com/') {
+                alert('🛒 微店配置中，敬请期待！\n\n老板提示：请先配置微店商品链接');
+            } else {
+                window.open(weidianUrl, '_blank');
+            }
+        }
 
         const resultTypes = {
   'ISTJ': { title: '物流师', desc: '实际、注重事实、责任心强，善于组织和执行。你可靠、务实，喜欢按计划行事。' },
