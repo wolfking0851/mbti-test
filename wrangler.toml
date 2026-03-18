@@ -1,9 +1,0 @@
-name = "mbti-test"
-compatibility_date = "2024-01-01"
-
-# Pages 配置 - 静态站点
-[site]
-bucket = "./"
-
-# 不包含的文件
-build.exclude = ["node_modules/**", "*.md", "*.log", ".git/**"]
