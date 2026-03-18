@@ -1,0 +1,466 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1a237e 50%, #0d1b2a 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 页面切换 */
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 首页 */
+#home-page {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #90caf9;
+    text-shadow: 0 0 20px rgba(144, 202, 249, 0.5);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #bbdefb;
+    margin-bottom: 30px;
+}
+
+.intro {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid rgba(144, 202, 249, 0.3);
+}
+
+.intro p {
+    margin: 10px 0;
+    color: #e3f2fd;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    color: white;
+    border: none;
+    padding: 15px 60px;
+    font-size: 1.3em;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 30px 0;
+    box-shadow: 0 5px 20px rgba(66, 165, 245, 0.4);
+    transition: all 0.3s ease;
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(66, 165, 245, 0.6);
+}
+
+.disclaimer {
+    background: rgba(255, 152, 0, 0.1);
+    border-left: 4px solid #ff9800;
+    padding: 15px;
+    margin-top: 30px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #ffe0b2;
+}
+
+.disclaimer p {
+    margin: 5px 0;
+}
+
+/* 选牌页面（扇形） */
+#select-page {
+    text-align: center;
+    padding: 20px;
+}
+
+#select-page h2 {
+    color: #90caf9;
+    margin-bottom: 10px;
+}
+
+.hint {
+    color: #bbdefb;
+    margin-bottom: 30px;
+    font-size: 1.2em;
+}
+
+#selected-count {
+    color: #64b5f6;
+    font-weight: bold;
+}
+
+.fan-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+    max-height: 620px;
+    overflow-y: auto;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+}
+
+.card-column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.card-column::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card-column::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.card-column::-webkit-scrollbar-thumb {
+    background: #64b5f6;
+    border-radius: 4px;
+}
+
+.fan-card {
+    width: 70px;
+    height: 93px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    border: 1px solid #90caf9;
+    flex-shrink: 0;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1a237e;
+}
+
+.fan-card:hover {
+    transform: scale(1.08);
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(144, 202, 249, 0.6);
+}
+
+.fan-card.selected {
+    border: 3px solid #ffb74d;
+    box-shadow: 0 0 25px rgba(255, 183, 77, 0.9);
+    transform: scale(1.05);
+}
+
+.fan-card .card-back {
+    width: 100%;
+    height: 100%;
+    background: url('../images/back/back_v2.jpg') center/cover;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #64b5f6, #42a5f5);
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    font-size: 1.2em;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 30px;
+    box-shadow: 0 5px 20px rgba(100, 181, 246, 0.4);
+}
+
+.confirm-btn:disabled {
+    background: #546e7a;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* 翻牌页面 */
+#flip-page {
+    text-align: center;
+    padding: 20px;
+}
+
+#flip-page h2 {
+    color: #90caf9;
+    margin-bottom: 10px;
+}
+
+/* 卡牌样式 */
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.card-slot {
+    perspective: 1000px;
+    width: 150px;
+    height: 200px;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.card.back {
+    transform: rotateY(0deg);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card.reversed.flipped {
+    transform: rotateY(180deg) rotateZ(180deg);
+}
+
+.card-back, .fan-card .card-back {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 3px solid #90caf9;
+    background: url('../images/back/back_v2.jpg') center/cover no-repeat !important;
+    background-color: #1a237e !important;
+}
+
+.card-front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 2px solid #64b5f6;
+    background: #1a237e;
+}
+
+.card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    display: block;
+}
+
+/* 解锁区域 */
+.unlock-section {
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 2px solid #90caf9;
+}
+
+.unlock-text {
+    font-size: 1.3em;
+    color: #e3f2fd;
+    margin-bottom: 20px;
+}
+
+.unlock-btn {
+    background: linear-gradient(135deg, #ff9800, #ffb74d);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+}
+
+.skip-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid #90caf9;
+    padding: 12px 40px;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+/* 解读页面 */
+#reading-page {
+    padding: 20px;
+}
+
+#reading-page h2 {
+    text-align: center;
+    color: #90caf9;
+    margin-bottom: 30px;
+}
+
+.reading-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.position {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(144, 202, 249, 0.3);
+}
+
+.position:last-child {
+    border-bottom: none;
+}
+
+.position h3 {
+    color: #64b5f6;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.card-display {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.card-display img {
+    width: 120px;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 2px solid #90caf9;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-name {
+    color: #90caf9;
+    font-size: 1.2em;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.reading-text {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    line-height: 1.8;
+    color: #e3f2fd;
+    border-left: 4px solid #64b5f6;
+}
+
+.summary {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #90caf9;
+}
+
+.summary h3 {
+    color: #ffb74d;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* 操作按钮 */
+.actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1em;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(66, 165, 245, 0.4);
+}
+
+.action-btn.secondary {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #90caf9;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .fan-container {
+        height: 500px;
+    }
+    
+    .fan-card {
+        width: 60px !important;
+        height: 80px !important;
+    }
+    
+    .card-slot {
+        width: 120px !important;
+        height: 160px !important;
+    }
+    
+    .card-column {
+        min-width: 70px !important;
+    }
+    
+    .start-btn {
+        padding: 12px 40px;
+        font-size: 1.1em;
+    }
+}
